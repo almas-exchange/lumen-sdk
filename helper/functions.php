@@ -237,17 +237,20 @@ if ( ! function_exists('timeFrame') )
     }
 }
 
-function ClassifyChar( $ch )
+if ( ! function_exists('ClassifyChar') )
 {
-    if ( ( 'a' <= $ch && 'z' >= $ch ) || ' ' == $ch )
-        return 'lower';
-    if ( 'A' <= $ch && 'Z' >= $ch )
-        return 'upper';
-    if ( '0' <= $ch && '9' >= $ch )
-        return 'number';
-    if ( false === strpos( "`~!@#$%^&*()_-+={}|[]\\:\";',./<>?", $ch ) )
-        return 'symbol';
-    return 'other';
+    function ClassifyChar( $ch )
+    {
+        if ( ( 'a' <= $ch && 'z' >= $ch ) || ' ' == $ch )
+            return 'lower';
+        if ( 'A' <= $ch && 'Z' >= $ch )
+            return 'upper';
+        if ( '0' <= $ch && '9' >= $ch )
+            return 'number';
+        if ( false === strpos( "`~!@#$%^&*()_-+={}|[]\\:\";',./<>?", $ch ) )
+            return 'symbol';
+        return 'other';
+    }
 }
 
 if ( ! function_exists('passwordScore') )
