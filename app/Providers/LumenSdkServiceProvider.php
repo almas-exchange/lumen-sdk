@@ -5,6 +5,7 @@ namespace Exchange\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Notification;
 use Exchange\Observers\NotificationObserver;
+use ImanRjb\JwtAuth\Services\AccessToken\AccessToken;
 
 class LumenSdkServiceProvider extends ServiceProvider
 {
@@ -18,7 +19,7 @@ class LumenSdkServiceProvider extends ServiceProvider
         // Register depends packages service providers just for lumen
         if (! $this->app instanceof \Illuminate\Foundation\Application) {
             $this->app->register(\Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
-            $this->app->register(\PassportAuth\PassportAuthServiceProvider::class);
+            $this->app->register(\ImanRjb\JwtAuth\JwtAuthServiceProvider::class);
             $this->app->register(\Anik\Form\FormRequestServiceProvider::class);
             $this->app->register(\Fruitcake\Cors\CorsServiceProvider::class);
             $this->app->register(\Illuminate\Redis\RedisServiceProvider::class);
@@ -86,6 +87,18 @@ class LumenSdkServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        // Auth guard
+        $this->app['auth']->viaRequest('api', function ($request) {
+            $token = $request->bearerToken();
+            if ($token) {
+                try {
+                    return AccessToken::checkToken($token);
+                } catch (\Exception $exception) {
+                    return;
+                }
+            }
+        });
+
         //Observers
         if (file_exists(base_path('app/Models/') . 'Notification.php')) {
             Notification::observe(NotificationObserver::class);
