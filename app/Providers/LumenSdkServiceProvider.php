@@ -24,7 +24,7 @@ class LumenSdkServiceProvider extends ServiceProvider
             $this->app->register(\Fruitcake\Cors\CorsServiceProvider::class);
             $this->app->register(\Illuminate\Redis\RedisServiceProvider::class);
             $this->app->register(\SwooleTW\Http\LumenServiceProvider::class);
-            $this->app->register(\Laravel\Horizon\HorizonServiceProvider::class);
+            $this->app->register(\Bschmitt\Amqp\LumenServiceProvider::class);
             $this->app->register(\ExchangeModel\Providers\ExchangeModelServiceProvider::class);
         }
 
@@ -40,7 +40,7 @@ class LumenSdkServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../../config/database.php' => lumen_config_path('database.php'),
             __DIR__.'/../../config/cors.php' => lumen_config_path('cors.php'),
-            __DIR__.'/../../config/horizon.php' => lumen_config_path('horizon.php'),
+            __DIR__.'/../../config/amqp.php' => lumen_config_path('amqp.php'),
             __DIR__.'/../../config/fee.php' => lumen_config_path('fee.php'),
             __DIR__.'/../../config/exchange-model.php' => lumen_config_path('exchange-model.php'),
         ], 'lumen-sdk');
@@ -55,8 +55,8 @@ class LumenSdkServiceProvider extends ServiceProvider
         if (file_exists($this->app->basePath() . '/config/exchange-model.php')) {
             $this->mergeConfigFrom($this->app->basePath() . '/config/exchange-model.php', 'model');
         }
-        if (file_exists($this->app->basePath() . '/config/horizon.php')) {
-            $this->mergeConfigFrom($this->app->basePath() . '/config/horizon.php', 'horizon');
+        if (file_exists($this->app->basePath() . '/config/amqp.php')) {
+            $this->mergeConfigFrom($this->app->basePath() . '/config/amqp.php', 'amqp');
         }
         if (file_exists(__DIR__ . '/../../config/fee.php')) {
             $this->mergeConfigFrom(__DIR__ . '/../../config/fee.php', 'fee');
