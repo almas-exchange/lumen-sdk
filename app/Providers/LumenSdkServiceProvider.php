@@ -4,7 +4,9 @@ namespace Exchange\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Models\Notification;
+use App\Models\Alert;
 use Exchange\Observers\NotificationObserver;
+use Exchange\Observers\AlertObserver;
 use ImanRjb\JwtAuth\Services\AccessToken\AccessToken;
 
 class LumenSdkServiceProvider extends ServiceProvider
@@ -102,6 +104,9 @@ class LumenSdkServiceProvider extends ServiceProvider
         //Observers
         if (file_exists(base_path('app/Models/') . 'Notification.php')) {
             Notification::observe(NotificationObserver::class);
+        }
+        if (file_exists(base_path('app/Models/') . 'Alert.php')) {
+            Alert::observe(AlertObserver::class);
         }
 
         // Files, e.g validations and ..
